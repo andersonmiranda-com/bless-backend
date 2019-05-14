@@ -110,9 +110,9 @@ exports.getCards = function(req, res) {
         if (doc !== null) {
             doc = doc.toObject();
             swipes = swipes
-                .concat(doc.liked || [])
-                .concat(doc.superliked || [])
-                .concat(doc.disliked || []);
+                .concat(doc.like || [])
+                .concat(doc.superlike || [])
+                .concat(doc.dislike || []);
         }
 
         swipes = swipes.concat(user._id);

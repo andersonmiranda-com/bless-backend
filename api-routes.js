@@ -11,6 +11,7 @@ router.get("/", function(req, res) {
 
 // Import contact controller
 var userController = require("./userController");
+var relationController = require("./relationController");
 
 // Contact routes
 router
@@ -26,6 +27,8 @@ router
     .delete(userController.delete);
 
 router.route("/getCards").post(userController.getCards);
+
+router.route("/saveRelation").post(relationController.saveRelation);
 
 // Export API routes
 module.exports = router;
