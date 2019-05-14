@@ -11,13 +11,6 @@ exports.saveRelation = function(req, res) {
 
     //mongoose.connection.db.collection("relations"). acessa o comando nativo do MOngoDB
 
-    mongoose.connection.db
-        .collection("relations")
-        .updateOne({ _id: user_id }, { $push: { [type]: item_id } }, { upsert: true });
-
-    if (type === "like" || type === "superlike") {
-        mongoose.connection.db
-            .collection("relations")
-            .updateOne({ _id: item_id }, { $push: { [type + "Back"]: item_id } }, { upsert: true });
-    }
+    Relation.updateOne({ _id: user_id }, { $push: { [type]: item_id } }, { upsert: true });
+    Relation.updateOne( { _id: item_id }, { $push: { [type + "Back"]: item_id } },{ upsert: true });
 };
