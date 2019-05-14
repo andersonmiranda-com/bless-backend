@@ -19,7 +19,13 @@ app.use(
 app.use(bodyParser.json());
 
 // Connect to Mongoose and set connection variable
-mongoose.connect("mongodb://localhost/bless", { useNewUrlParser: true });
+//mongoose.connect("mongodb://localhost/bless", { useNewUrlParser: true });
+
+mongoose.connect(
+    "mongodb+srv://andersonmiranda:6jxHNO7KHO3FeRXE@cluster0-dx3cd.mongodb.net/bless",
+    { useNewUrlParser: true }
+);
+
 
 var db = mongoose.connection;
 // Setup server port
