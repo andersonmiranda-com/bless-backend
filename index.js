@@ -26,12 +26,12 @@ var db = mongoose.connection;
 var port = process.env.PORT || 3000;
 
 // Send message for default URL
-app.get("/", (req, res) => res.send("Hello World with Express"));
+app.get("/", (req, res) => res.send("Welcome to Bless Backend Server"));
 
 // Use Api routes in the App
 app.use("/api", apiRoutes);
 
 // Launch app to listen to specified port
 app.listen(port, function() {
-    console.log("Running RestHub on port " + port);
+    console.log("Running Bless Backend Server on port " + port);
 });

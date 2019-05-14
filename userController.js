@@ -144,7 +144,7 @@ exports.getCards = function(req, res) {
                 $gt: dateRange1,
                 $lte: dateRange0
             },
-            _id: { $nin: swipes } 
+            _id: { $nin: swipes }
         };
 
         if (user.gender === "Male") {
@@ -177,7 +177,6 @@ exports.getCards = function(req, res) {
                 data: results,
                 count: results.length
             });
-            
         });
     });
 };
