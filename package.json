@@ -1,22 +1,25 @@
 {
-  "name": "resthub",
-  "version": "1.0.0",
-  "description": "An app demonstrating simple Restful API implementation",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [
-    "api",
-    "restful",
-    "json"
-  ],
-  "author": "David Inyang-Etoh",
-  "license": "ISC",
-  "dependencies": {
-    "body-parser": "^1.18.3",
-    "express": "^4.16.3",
-    "moment": "^2.24.0",
-    "mongoose": "^5.1.7"
-  }
+    "name": "bless-backend",
+    "version": "1.0.0",
+    "description": "An app demonstrating simple Restful API implementation",
+    "main": "index.js",
+    "scripts": {
+        "start": "node index.js",
+        "e2e": "repo-tools test deploy",
+        "test": "repo-tools test app",
+        "cover": "nyc --cache npm test; nyc report --reporter=html"
+    },
+    "keywords": [
+        "api",
+        "restful",
+        "json"
+    ],
+    "author": "Anderson Miranda",
+    "license": "ISC",
+    "dependencies": {
+        "body-parser": "^1.18.3",
+        "express": "^4.16.3",
+        "moment": "^2.24.0",
+        "mongoose": "^5.1.7"
+    }
 }
