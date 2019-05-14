@@ -18,22 +18,19 @@ exports.saveRelation = function(req, res) {
         if (err) {
             res.json({ status: "error", message: err });
         }
-        res.json({
-            status: "success"
-        });
-    });
 
-    Relation.updateOne(
-        { _id: item_id },
-        { $push: { [type + "Back"]: item_id } },
-        { upsert: true },
-        function(err, doc) {
-            if (err) {
-                res.json({ status: "error", message: err });
+        Relation.updateOne(
+            { _id: item_id },
+            { $push: { [type + "Back"]: item_id } },
+            { upsert: true },
+            function(err, doc) {
+                if (err) {
+                    res.json({ status: "error", message: err });
+                }
+                res.json({
+                    status: "success"
+                });
             }
-            res.json({
-                status: "success"
-            });
-        }
-    );
+        );
+    });
 };
