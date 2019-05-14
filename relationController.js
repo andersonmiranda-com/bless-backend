@@ -16,10 +16,7 @@ exports.saveRelation = function(req, res) {
         doc
     ) {
         if (err) {
-            res.json({
-                status: "error",
-                message: err
-            });
+            res.json({ status: "error", message: err });
         }
         res.json({
             status: "success"
@@ -32,11 +29,11 @@ exports.saveRelation = function(req, res) {
         { upsert: true },
         function(err, doc) {
             if (err) {
-                res.json({
-                    status: "error",
-                    message: err
-                });
+                res.json({ status: "error", message: err });
             }
+            res.json({
+                status: "success"
+            });
         }
     );
 };
