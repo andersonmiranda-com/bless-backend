@@ -1,7 +1,4 @@
-// require and configure dotenv, will load vars in .env in PROCESS.ENV
-//require("dotenv").config();
-
-let config = {
+const config = {
     env: process.env.NODE_ENV || "production",
     port: process.env.PORT || 3000,
     mongo: {
