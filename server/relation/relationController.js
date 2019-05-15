@@ -2,7 +2,7 @@
 Relation = require("./relationModel");
 let mongoose = require("mongoose");
 
-exports.saveRelation = function(req, res) {
+exports.save = function(req, res) {
     let { user_id, item_id, type } = req.body;
     user_id = mongoose.Types.ObjectId(user_id);
     item_id = mongoose.Types.ObjectId(item_id);

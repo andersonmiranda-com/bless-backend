@@ -1,6 +1,6 @@
 // Import contact model
 User = require("./userModel");
-Relation = require("./relationModel");
+Relation = require("../relation/relationModel");
 moment = require("moment");
 
 // Handle index actions
