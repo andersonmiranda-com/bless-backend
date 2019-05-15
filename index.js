@@ -5,15 +5,15 @@ const app = require("./config/express");
 // Connect to Mongoose and set connection variable
 //mongoose.connect("mongodb://localhost/bless", { useNewUrlParser: true });
 
-mongoose.connect(
-    "mongodb+srv://andersonmiranda:6jxHNO7KHO3FeRXE@cluster0-dx3cd.mongodb.net/bless",
-    { useNewUrlParser: true }
-);
-
-var db = mongoose.connection;
-var port = process.env.PORT || 3000;
-
-
-app.listen(port, function() {
-    console.log("Running Bless Backend Server on port " + port);
+// connect to mongo db
+const mongoUri = config.mongo.host;
+mongoose.connect(mongoUri, { useNewUrlParser: true });
+mongoose.connection.on("error", () => {
+    throw new Error(`unable to connect to database: ${mongoUri}`);
 });
+
+app.listen(config.port, () => {
+    console.info(`server started on port ${config.port} (${config.env})`); // eslint-disable-line no-console
+});
+
+module.exports = app;

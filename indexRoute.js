@@ -12,7 +12,7 @@ router.get("/", function(req, res) {
     });
 });
 
-router.get("/env", (req, res) => res.json(process.env));
+router.get("/env", (req, res) => res.json(config));
 
 router.use("/users", userRoutes);
 router.use("/relations", relationRoutes);

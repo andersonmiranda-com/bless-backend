@@ -1,13 +1,18 @@
 // require and configure dotenv, will load vars in .env in PROCESS.ENV
 //require("dotenv").config();
 
-const config = {
-    env: process.env.NODE_ENV,
-    port: process.env.PORT,
+let config = {
+    env: process.env.NODE_ENV || "production",
+    port: process.env.PORT || 3000,
     mongo: {
-        host: process.env.MONGO_HOST,
-        port: process.env.MONGO_PORT
+        host: "mongodb://localhost/bless",
+        port: 27017
     }
 };
+
+if (config.env === "production") {
+    config.mongo.host =
+        "mongodb+srv://andersonmiranda:6jxHNO7KHO3FeRXE@cluster0-dx3cd.mongodb.net/bless";
+}
 
 module.exports = config;
