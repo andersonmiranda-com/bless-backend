@@ -13,6 +13,7 @@ router
     .put(userController.update)
     .delete(userController.delete);
 
+router.route("/save").post(userController.save);
 router.route("/getCards").post(userController.getCards);
 
 // Export API routes

@@ -7,18 +7,14 @@ exports.save = function(req, res) {
     user_id = mongoose.Types.ObjectId(user_id);
     item_id = mongoose.Types.ObjectId(item_id);
 
-    console.log(user_id, item_id, type);
+    //console.log(user_id, item_id, type);
 
     //mongoose.connection.db.collection("relations"). acessa o comando nativo do MOngoDB
 
-    Relation.updateOne({ _id: user_id }, { $push: { [type]: item_id } }, { upsert: true }, function(
-        err,
-        doc
-    ) {
-        if (err) {
-            res.json({ status: "error", message: err });
-        }
-
+    Relation.updateOne({ _id: user_id }, { $push: { [type]: item_id } }, { upsert: true })
+        .then(res => res.json({ status: "ok" }))
+        .catch(err => res.json({ status: "error", message: err }));
+    /* 
         Relation.updateOne(
             { _id: item_id },
             { $push: { [type + "Back"]: item_id } },
@@ -31,6 +27,5 @@ exports.save = function(req, res) {
                     status: "success"
                 });
             }
-        );
-    });
+        ); */
 };

@@ -2,6 +2,7 @@
 User = require("./userModel");
 Relation = require("../relation/relationModel");
 moment = require("moment");
+const mongoose = require("mongoose");
 
 // Handle index actions
 exports.index = function(req, res) {
@@ -35,25 +36,21 @@ exports.new = function(req, res) {
 
 // Handle view contact info
 exports.view = function(req, res) {
-    User.findById(req.params._id, (err, contact) => {
-        if (err) res.send(err);
-        res.json({
-            message: "Contact details loading..",
-            data: contact
-        });
-    });
+    User.findById(req.params._id)
+        .then(result => {
+            res.json(result);
+        })
+        .catch(err => res.json({ status: "error", message: err }));
 };
 
 // Handle update contact info
 exports.update = function(req, res) {
     User.findById(req.params.contact_id, (err, user) => {
         if (err) res.send(err);
-
         user.first_name = req.body.first_name ? req.body.first_name : contact.first_name;
         user.last_name = req.body.gender;
         user.gender = req.body.gender;
         user.birthday = req.body.birthday;
-
         // save the contact and check for errors
         user.save(err => {
             if (err) res.json(err);
@@ -82,6 +79,20 @@ exports.delete = function(req, res) {
     );
 };
 
+exports.save = function(req, res) {
+    const _id = req.body._id;
+    const userData = req.body.userData;
+    const upsert = req.body.upsert || false;
+
+    console.log(_id, userData, upsert);
+
+    //mongoose.connection.db.collection("relations"). acessa o comando nativo do MOngoDB
+
+    User.updateOne({ _id: _id.toString() }, { $set: userData }, { upsert: upsert })
+        .then(result => res.json({ status: "ok" }))
+        .catch(err => res.json({ status: "error", message: err }));
+};
+
 exports.getCards = function(req, res) {
     const user = req.body.user;
 
@@ -90,8 +101,6 @@ exports.getCards = function(req, res) {
 
     Relation.findOne(query1)
         .then(results => {
-            console.log("relations res", results);
-
             let swipes = [];
 
             if (results !== null) {
