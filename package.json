@@ -17,10 +17,17 @@
     "author": "Anderson Miranda",
     "license": "ISC",
     "dependencies": {
+        "bluebird": "^3.5.4",
         "body-parser": "^1.18.3",
         "dotenv": "^8.0.0",
         "express": "^4.16.3",
         "moment": "^2.24.0",
         "mongoose": "^5.1.7"
+    },
+    "devDependencies": {
+        "eslint": "3.16.1",
+        "eslint-config-airbnb-base": "7.1.0",
+        "eslint-plugin-import": "1.16.0",
+        "eslint-watch": "2.1.14"
     }
 }

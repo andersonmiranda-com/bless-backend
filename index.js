@@ -2,8 +2,11 @@ let mongoose = require("mongoose");
 const config = require("./config/config");
 const app = require("./config/express");
 
-// Connect to Mongoose and set connection variable
-//mongoose.connect("mongodb://localhost/bless", { useNewUrlParser: true });
+// make bluebird default Promise
+Promise = require("bluebird"); // eslint-disable-line no-global-assign
+
+// plugin bluebird promise in mongoose
+mongoose.Promise = Promise;
 
 // connect to mongo db
 const mongoUri = config.mongo.host;
