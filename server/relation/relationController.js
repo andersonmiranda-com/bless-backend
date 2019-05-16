@@ -1,6 +1,6 @@
 // Import contact model
-Relation = require("./relationModel");
-let mongoose = require("mongoose");
+const Relation = require("./relationModel");
+const mongoose = require("mongoose");
 
 exports.save = function(req, res) {
     let { user_id, item_id, type } = req.body;
@@ -10,22 +10,12 @@ exports.save = function(req, res) {
     //console.log(user_id, item_id, type);
 
     //mongoose.connection.db.collection("relations"). acessa o comando nativo do MOngoDB
-
-    Relation.updateOne({ _id: user_id }, { $push: { [type]: item_id } }, { upsert: true })
+    Relation.updateOne(
+        { _id: user_id },
+        { $push: { swipes: { uid: item_id, type: type } } },
+        { upsert: true }
+    )
         .then(res => res.json({ status: "ok" }))
         .catch(err => res.json({ status: "error", message: err }));
-    /* 
-        Relation.updateOne(
-            { _id: item_id },
-            { $push: { [type + "Back"]: item_id } },
-            { upsert: true },
-            function(err, doc) {
-                if (err) {
-                    res.json({ status: "error", message: err });
-                }
-                res.json({
-                    status: "success"
-                });
-            }
-        ); */
+
 };

@@ -1,8 +1,8 @@
-// Import contact model
-User = require("./userModel");
-Relation = require("../relation/relationModel");
-moment = require("moment");
 const mongoose = require("mongoose");
+const moment = require("moment");
+
+const User = require("./userModel");
+const Relation = require("../relation/relationModel");
 
 // Handle index actions
 exports.index = function(req, res) {
@@ -84,10 +84,9 @@ exports.save = function(req, res) {
     const userData = req.body.userData;
     const upsert = req.body.upsert || false;
 
-    console.log(_id, userData, upsert);
+    //console.log(_id, userData, upsert);
 
     //mongoose.connection.db.collection("relations"). acessa o comando nativo do MOngoDB
-
     User.updateOne({ _id: _id.toString() }, { $set: userData }, { upsert: upsert })
         .then(result => res.json({ status: "ok" }))
         .catch(err => res.json({ status: "error", message: err }));
@@ -95,6 +94,7 @@ exports.save = function(req, res) {
 
 exports.getCards = function(req, res) {
     const user = req.body.user;
+    const userId = mongoose.Types.ObjectId(user._id);
 
     // / query 1 - swipes dados pelo user - para nao aparecer novamente
     const query1 = { _id: user._id };
@@ -102,16 +102,11 @@ exports.getCards = function(req, res) {
     Relation.findOne(query1)
         .then(results => {
             let swipes = [];
-
             if (results !== null) {
                 results = results.toObject();
-                swipes = swipes
-                    .concat(results.like || [])
-                    .concat(results.superlike || [])
-                    .concat(results.dislike || []);
+                swipes = results.swipes.map(swipe => swipe.uid);
             }
-
-            swipes = swipes.concat(user._id);
+            swipes = swipes.concat(userId);
 
             const ageRange0 = user.ageRange[0] || 18;
             const ageRange1 = user.ageRange[1] || 100;
@@ -126,18 +121,6 @@ exports.getCards = function(req, res) {
             // / query2 - cards que correspondem aos filtros
 
             const query2 = {
-                location: {
-                    $nearSphere: {
-                        $geometry: {
-                            type: "Point",
-                            coordinates: [
-                                user.location.coordinates[0],
-                                user.location.coordinates[1]
-                            ]
-                        },
-                        $maxDistance: user.distance * 1000
-                    }
-                },
                 showMe: true,
                 birthday: {
                     $gt: dateRange1,
@@ -159,11 +142,77 @@ exports.getCards = function(req, res) {
                 query2.gender = "Female";
             }
 
-            const options = { birthday: 1, first_name: 1, bio: 1, _id: 1, image: 1, location: 1 };
+            const aggregate = [
+                //geo query
+                {
+                    $geoNear: {
+                        near: {
+                            type: "Point",
+                            coordinates: [
+                                user.location.coordinates[0],
+                                user.location.coordinates[1]
+                            ]
+                        },
+                        distanceField: "distance_in_meters",
+                        maxDistance: user.distance * 1000,
+                        query: query2
+                    }
+                },
 
-            return User.find(query2, options)
+                // busca na tabela de swipes por likes/superlikes
+                {
+                    $lookup: {
+                        from: "relations", // other table name
+                        let: { uid: "$_id" },
+                        pipeline: [
+                            { $unwind: "$swipes" },
+                            {
+                                $match: {
+                                    $expr: {
+                                        $and: [
+                                            { $eq: ["$_id", "$$uid"] },
+                                            {
+                                                $eq: [userId, "$swipes.uid"]
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        ],
+                        as: "likes" // alias 
+                    }
+                },
+
+                //poe likes como campo do objeto
+                {
+                    $addFields: { likeBack: { $arrayElemAt: ["$likes.swipes.type", 0] } }
+                },
+
+                //exclui dislikes back
+                {
+                    $match: { likeBack: { $ne: "dislike" } }
+                },
+
+                //define que campos devolver 
+                {
+                    $project: {
+                        birthday: 1,
+                        first_name: 1,
+                        bio: 1,
+                        _id: 1,
+                        image: 1,
+                        likeBack: 1,
+                        distance_in_meters: 1
+                    }
+                }
+            ];
+
+            //console.time("getCards");
+
+            return User.aggregate(aggregate)
                 .then(results => {
                     console.log(results.length);
+                    //console.timeEnd("getCards");
                     res.json({
                         status: "success",
                         message: "Cards retrieved successfully",

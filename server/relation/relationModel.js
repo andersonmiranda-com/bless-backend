@@ -2,12 +2,7 @@ var mongoose = require("mongoose");
 
 // Setup schema
 var relationSchema = mongoose.Schema({
-    like: [],
-    dislike: [],
-    superlike: [],
-    likeBack: [],
-    dislikeBack: [],
-    superlikeBack: []
+    swipes: []
 });
 
 // Export Contact model
