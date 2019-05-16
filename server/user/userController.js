@@ -47,7 +47,7 @@ exports.view = function(req, res) {
 exports.update = function(req, res) {
     User.findById(req.params.contact_id, (err, user) => {
         if (err) res.send(err);
-        user.first_name = req.body.first_name ? req.body.first_name : contact.first_name;
+        user.first_name = req.body.first_name ? req.body.first_name : user.first_name;
         user.last_name = req.body.gender;
         user.gender = req.body.gender;
         user.birthday = req.body.birthday;
@@ -56,7 +56,7 @@ exports.update = function(req, res) {
             if (err) res.json(err);
             res.json({
                 message: "Contact Info updated",
-                data: contact
+                data: user
             });
         });
     });
@@ -84,10 +84,10 @@ exports.save = function(req, res) {
     const userData = req.body.userData;
     const upsert = req.body.upsert || false;
 
-    //console.log(_id, userData, upsert);
+    // console.log(_id, userData, upsert);
 
-    //mongoose.connection.db.collection("relations"). acessa o comando nativo do MOngoDB
-    User.updateOne({ _id: _id.toString() }, { $set: userData }, { upsert: upsert })
+    // mongoose.connection.db.collection("relations"). acessa o comando nativo do MOngoDB
+    User.updateOne({ _id: _id.toString() }, { $set: userData }, { upsert })
         .then(result => res.json({ status: "ok" }))
         .catch(err => res.json({ status: "error", message: err }));
 };
@@ -108,7 +108,6 @@ exports.getCards = function(req, res) {
             }
             swipes = swipes.concat(userId);
 
-        
             // / query2 - cards que correspondem aos filtros
             const ageRange0 = user.ageRange[0] || 18;
             const ageRange1 = user.ageRange[1] || 100;
@@ -143,7 +142,7 @@ exports.getCards = function(req, res) {
             }
 
             const aggregate = [
-                //geo query
+                // geo query
                 {
                     $geoNear: {
                         near: {
@@ -183,17 +182,17 @@ exports.getCards = function(req, res) {
                     }
                 },
 
-                //poe likes como campo do objeto
+                // poe likes como campo do objeto
                 {
                     $addFields: { likeBack: { $arrayElemAt: ["$likes.swipes.type", 0] } }
                 },
 
-                //exclui dislikes back
+                // exclui dislikes back
                 {
                     $match: { likeBack: { $ne: "dislike" } }
                 },
 
-                //define que campos devolver
+                // define que campos devolver
                 {
                     $project: {
                         birthday: 1,
@@ -207,16 +206,16 @@ exports.getCards = function(req, res) {
                 }
             ];
 
-            //console.time("getCards");
+            // console.time("getCards");
 
             return User.aggregate(aggregate)
-                .then(results => {
+                .then(results2 => {
                     console.log(results.length);
-                    //console.timeEnd("getCards");
+                    // console.timeEnd("getCards");
                     res.json({
                         status: "success",
                         message: "Cards retrieved successfully",
-                        data: results,
+                        data: results2,
                         count: results.length
                     });
                 })
