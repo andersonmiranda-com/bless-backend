@@ -108,6 +108,8 @@ exports.getCards = function(req, res) {
             }
             swipes = swipes.concat(userId);
 
+        
+            // / query2 - cards que correspondem aos filtros
             const ageRange0 = user.ageRange[0] || 18;
             const ageRange1 = user.ageRange[1] || 100;
 
@@ -117,8 +119,6 @@ exports.getCards = function(req, res) {
             const dateRange1 = moment()
                 .subtract(ageRange1, "years")
                 .toDate();
-
-            // / query2 - cards que correspondem aos filtros
 
             const query2 = {
                 showMe: true,
@@ -179,7 +179,7 @@ exports.getCards = function(req, res) {
                                 }
                             }
                         ],
-                        as: "likes" // alias 
+                        as: "likes" // alias
                     }
                 },
 
@@ -193,7 +193,7 @@ exports.getCards = function(req, res) {
                     $match: { likeBack: { $ne: "dislike" } }
                 },
 
-                //define que campos devolver 
+                //define que campos devolver
                 {
                     $project: {
                         birthday: 1,
