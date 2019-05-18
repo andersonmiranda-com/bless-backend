@@ -201,6 +201,7 @@ exports.getCards = function(req, res) {
                         _id: 1,
                         image: 1,
                         likeBack: 1,
+                        gender: 1,
                         distance_in_meters: 1
                     }
                 }

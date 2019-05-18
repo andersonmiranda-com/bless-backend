@@ -3,19 +3,18 @@ const Relation = require("./relationModel");
 const mongoose = require("mongoose");
 
 exports.save = function(req, res) {
-    let { user_id, item_id, type } = req.body;
-    user_id = mongoose.Types.ObjectId(user_id);
-    item_id = mongoose.Types.ObjectId(item_id);
+    let { userId, itemId, type } = req.body;
+    userId = mongoose.Types.ObjectId(userId);
+    itemId = mongoose.Types.ObjectId(itemId);
 
-    //console.log(user_id, item_id, type);
+    console.log("relation", userId, itemId, type);
 
     //mongoose.connection.db.collection("relations"). acessa o comando nativo do MOngoDB
     Relation.updateOne(
-        { _id: user_id },
-        { $push: { swipes: { uid: item_id, type: type } } },
+        { _id: userId },
+        { $push: { swipes: { uid: itemId, type: type } } },
         { upsert: true }
     )
         .then(res => res.json({ status: "ok" }))
         .catch(err => res.json({ status: "error", message: err }));
-
 };
