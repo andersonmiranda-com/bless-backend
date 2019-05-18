@@ -210,16 +210,19 @@ exports.getCards = function(req, res) {
 
             return User.aggregate(aggregate)
                 .then(results2 => {
-                    console.log(results.length);
+                    console.log(results2.length);
                     // console.timeEnd("getCards");
                     res.json({
                         status: "success",
                         message: "Cards retrieved successfully",
                         data: results2,
-                        count: results.length
+                        count: results2.length
                     });
                 })
-                .catch(e => res.json(e));
+                .catch(e => {
+                    console.log(e); 
+                    res.json(e)}
+                    );
         })
         .catch(e => res.json(e));
 };
