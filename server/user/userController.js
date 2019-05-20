@@ -141,7 +141,7 @@ exports.getCards = function(req, res) {
                 query2.gender = "Female";
             }
 
-            const aggregate = [
+            const pipeline = [
                 // geo query
                 {
                     $geoNear: {
@@ -208,14 +208,12 @@ exports.getCards = function(req, res) {
             ];
 
             // console.time("getCards");
-
-            return User.aggregate(aggregate)
+            return User.aggregate(pipeline)
                 .then(results2 => {
                     console.log(results2.length);
                     // console.timeEnd("getCards");
                     res.json({
                         status: "success",
-                        message: "Cards retrieved successfully",
                         data: results2,
                         count: results2.length
                     });
