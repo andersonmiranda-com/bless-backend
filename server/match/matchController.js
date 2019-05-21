@@ -9,7 +9,7 @@ exports.save = function(req, res) {
 
     console.log("match", userId, itemId);
 
-    Match.create({ match: [userId, itemId] })
+    Match.create({ match: [userId, itemId], createdAt: new Date(), lastMessage: { text : ""} })
         .then(res => res.json({ status: "ok" }))
         .catch(err => res.json({ status: "error", message: err }));
 };
@@ -54,8 +54,6 @@ exports.getMatches = function(req, res) {
             }
         }
     ];
-
-    console.log(pipeline);
 
     Match.aggregate(pipeline)
         .then(results => {

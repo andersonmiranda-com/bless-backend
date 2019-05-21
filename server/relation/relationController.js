@@ -12,7 +12,7 @@ exports.save = function(req, res) {
     //mongoose.connection.db.collection("relations"). acessa o comando nativo do MOngoDB
     Relation.updateOne(
         { _id: userId },
-        { $push: { swipes: { uid: itemId, type: type } } },
+        { $push: { swipes: { uid: itemId, type: type, createdAt: new Date()} } },
         { upsert: true }
     )
         .then(res => res.json({ status: "ok" }))

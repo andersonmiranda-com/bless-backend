@@ -2,7 +2,9 @@ var mongoose = require("mongoose");
 
 // Setup schema
 var matchSchema = mongoose.Schema({
-    match: mongoose.Schema.Types.Mixed
+    match: mongoose.Schema.Types.Mixed,
+    createdAt: Date,
+    lastMessage: mongoose.Schema.Types.Mixed
 });
 
 // Export Contact model
